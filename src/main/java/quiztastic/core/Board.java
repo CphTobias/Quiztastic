@@ -49,10 +49,8 @@ public class Board {
 
         @Override
         public String toString() {
-            return "Group{" +
-                    "category=" + category +
-                    ", questions=" + questions +
-                    '}';
+            return  "\n\nCategory:" + category +
+                    "\nQuestions: " + questions;
         }
     }
 }
