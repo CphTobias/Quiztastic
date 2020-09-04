@@ -10,12 +10,14 @@ public class Question {
     private final Category category;
     private final String question;
     private final String answer;
+    private char questionChar;
 
-    public Question(int score, Category category, String question, String answer) {
+    public Question(int score, Category category, String question, String answer, char questionChar) {
         this.score = score;
         this.category = category;
         this.question = question;
         this.answer = answer;
+        this.questionChar = questionChar;
     }
 
     public int getScore() {
@@ -32,6 +34,10 @@ public class Question {
 
     public String getAnswer() {
         return answer;
+    }
+
+    public void setQuestionChar(char questionChar) {
+        this.questionChar = questionChar;
     }
 
     @Override

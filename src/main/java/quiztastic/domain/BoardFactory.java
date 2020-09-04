@@ -16,8 +16,9 @@ public class BoardFactory {
     public BoardFactory(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
-
+    static char questionChars = 'A';
     public Board.Group makeGroup(Category c) throws IllegalArgumentException {
+
         List<Question> questions =
                 questionRepository.getQuestionsWithCategory(c);
         if (questions.size() >= 5) {
@@ -25,6 +26,10 @@ public class BoardFactory {
         } else {
             throw new IllegalArgumentException("Not enough questions in category");
         }
+    }
+
+    public void makeChar(){
+        questionChars+=1;
     }
 
     public Board makeBoard() {

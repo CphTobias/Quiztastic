@@ -14,6 +14,7 @@ import java.text.ParseException;
 public class QuestionReader {
     private final BufferedReader reader;
     private int lineCounter = 0;
+    private char questionChar = 'A';
 
     public QuestionReader(BufferedReader reader) {
         this.reader = reader;
@@ -40,13 +41,13 @@ public class QuestionReader {
                 score = Integer.parseInt(fields[0]);
             } catch (NumberFormatException e) {
                 throw new ParseException(
-                        "Expected an integer in field 1, but got \"" + fields[0] + "\"",
+                        "Expected an integer in field 1, but got \"" + fields[1] + "\"",
                         lineCounter);
             }
             Category category = new Category(fields[1]);
             String question = fields[2];
             String answer = fields[3];
-            return new Question(score, category, question, answer);
+            return new Question(score, category, question, answer, questionChar);
         }
     }
 
