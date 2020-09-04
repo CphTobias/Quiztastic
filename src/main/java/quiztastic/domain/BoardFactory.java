@@ -1,4 +1,4 @@
-package quiztastic.domain;
+    package quiztastic.domain;
 
 import quiztastic.core.Board;
 import quiztastic.core.Category;
@@ -6,13 +6,14 @@ import quiztastic.core.Question;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class BoardController {
+public class BoardFactory {
     public final QuestionRepository questionRepository;
 
-    public BoardController(QuestionRepository questionRepository) {
+    public BoardFactory(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
 

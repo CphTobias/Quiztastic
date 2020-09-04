@@ -36,7 +36,6 @@ public class Question {
 
     @Override
     public String toString() {
-        return  "\nScore = " + score +
-                ", Question = " + question;
+        return  "\n" + score;
     }
 }
