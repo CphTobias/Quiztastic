@@ -61,8 +61,7 @@ public class Board {
 
         @Override
         public String toString() {
-            return  "\n\nCategory:" + category +
-                    "\nQuestions: " + questions;
+            return "" + questions.get(200);
         }
     }
 }

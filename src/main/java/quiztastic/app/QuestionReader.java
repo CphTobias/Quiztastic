@@ -14,7 +14,6 @@ import java.text.ParseException;
 public class QuestionReader {
     private final BufferedReader reader;
     private int lineCounter = 0;
-    private char questionChar = 'A';
 
     public QuestionReader(BufferedReader reader) {
         this.reader = reader;
@@ -47,7 +46,7 @@ public class QuestionReader {
             Category category = new Category(fields[1]);
             String question = fields[2];
             String answer = fields[3];
-            return new Question(score, category, question, answer, questionChar);
+            return new Question(score, category, question, answer);
         }
     }
 

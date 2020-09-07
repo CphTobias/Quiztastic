@@ -2,10 +2,13 @@ package quiztastic.ui;
 
 import quiztastic.app.Quiztastic;
 import quiztastic.core.Board;
+import quiztastic.core.Question;
+import quiztastic.domain.Game;
 
 import java.io.IOException;
 import java.io.StringBufferInputStream;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -17,7 +20,7 @@ public class Protocol {
 
         System.out.println("Write help for information about the game\n");
 
-        String input = in.nextLine();
+        String input = in.next();
 
         while(!input.equals("exit")) {
             switch(input) {
@@ -25,12 +28,18 @@ public class Protocol {
                     getHelpMsg();
                     break;
                 case "draw":
-                    //System.out.println(quiz.getBoard());
                     displayBoard();
                     break;
                 case "answer":
                     System.out.println("What question do you want to answer?");
-                    String input2 = in.nextLine();
+                    String question = in.next();
+                    String a = question.substring(0, 1).toLowerCase();
+                    int questionScore = Integer.parseInt(question.substring(1));
+
+                    chooseCategory(question);
+
+                    System.out.println(chooseCategory(input2));
+
 
                     break;
                 default:
@@ -64,12 +73,28 @@ public class Protocol {
     }
 
     public void displayBoard(){
+        Game game = quiz.getCurrentGame();
         Board board = quiz.getBoard();
+        List<Integer> scores = List.of(100,200,300,400,500);
+
         for (Board.Group g : board.getGroups()) {
-            System.out.print(g.getCategory().getName() + "  ");
-            
+            System.out.print(g.getCategory().getName() + " |");
         }
         System.out.println();
+
+        for(int questionnumber = 0; questionnumber < 5; questionnumber++){
+            System.out.print("|");
+            for(int category = 0; category < 5; category++){
+                System.out.print("     ");
+                if(game.isAnswered(category, questionnumber)){
+                    System.out.print("---");
+                } else {
+                    System.out.print(scores.get(questionnumber));
+                }
+                System.out.print("     |");
+            }
+            System.out.println();
+        }
     }
 
     public void getHelpMsg(){

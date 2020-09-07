@@ -3,6 +3,7 @@ package quiztastic.app;
 import quiztastic.core.Board;
 import quiztastic.core.Question;
 import quiztastic.domain.BoardFactory;
+import quiztastic.domain.Game;
 import quiztastic.domain.QuestionRepository;
 
 import java.io.IOException;
@@ -31,9 +32,11 @@ public class Quiztastic {
     }
 
     private final QuestionRepository questions;
+    private final Game game;
 
-    private Quiztastic(QuestionRepository questions) {
+    private Quiztastic(QuestionRepository questions, Game game) {
         this.questions = questions;
+        this.game = game;
     }
 
     public Iterable<Question> getQuestions() {
@@ -42,5 +45,9 @@ public class Quiztastic {
 
     public Board getBoard() {
         return new BoardFactory(questions).makeBoard();
+    }
+
+    public Game getCurrentGame(){
+        return game;
     }
 }

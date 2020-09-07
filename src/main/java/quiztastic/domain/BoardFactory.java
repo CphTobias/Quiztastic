@@ -16,7 +16,6 @@ public class BoardFactory {
     public BoardFactory(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
-    static char questionChars = 'A';
     public Board.Group makeGroup(Category c) throws IllegalArgumentException {
 
         List<Question> questions =
@@ -28,9 +27,6 @@ public class BoardFactory {
         }
     }
 
-    public void makeChar(){
-        questionChars+=1;
-    }
 
     public Board makeBoard() {
         List<Board.Group> groups = new ArrayList<>();
