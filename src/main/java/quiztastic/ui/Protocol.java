@@ -38,7 +38,7 @@ public class Protocol {
 
                     chooseCategory(question);
 
-                    System.out.println(chooseCategory(input2));
+                    //System.out.println(chooseCategory(input2));
 
 
                     break;

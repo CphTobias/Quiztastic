@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.ParseException;
+import java.util.ArrayList;
 
 public class Quiztastic {
     private static Quiztastic instance;
@@ -21,7 +22,9 @@ public class Quiztastic {
                     .getResourceAsStream("master_season1-35clean.tsv");
             QuestionReader reader = new QuestionReader(new InputStreamReader(s));
             try {
-                instance = new Quiztastic(MapQuestionRepository.fromQuestionReader(reader));
+                MapQuestionRepository repo = MapQuestionRepository.fromQuestionReader(reader);
+                Game game = new Game(new BoardFactory(repo).makeBoard(), new ArrayList<>());
+                instance = new Quiztastic(repo, game);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } catch (ParseException e) {
@@ -47,7 +50,7 @@ public class Quiztastic {
         return new BoardFactory(questions).makeBoard();
     }
 
-    public Game getCurrentGame(){
+    public Game getCurrentGame() {
         return game;
     }
 }
