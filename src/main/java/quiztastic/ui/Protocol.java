@@ -6,15 +6,24 @@ import quiztastic.core.Question;
 import quiztastic.domain.Game;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringBufferInputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class Protocol {
+public class Protocol implements Runnable {
 
     Quiztastic quiz = Quiztastic.getInstance();
+    private final Socket socket;
+
+    public Protocol(Socket socket) {
+        this.socket = socket;
+    }
+
     public void StartGame() throws IOException, ParseException {
         Scanner in = new Scanner(System.in);
 
@@ -104,7 +113,60 @@ public class Protocol {
                 "exit: exits the game");
     }
 
+
+    @Override
+    public void run() {
+        try {
+            Scanner in = new Scanner(socket.getInputStream());
+            PrintWriter out = new PrintWriter(socket.getOutputStream());
+
+            System.out.println("Velkommen til Quiztasic, du kan skrive help for hjælp");
+
+            String line = null;
+            while (!(line = in.nextLine()).equals("exit")) {
+                switch (line) {
+                    case "help":
+                        getHelpMsg();
+                        break;
+                    case "draw":
+                        displayBoard();
+                        break;
+                    case "answer":
+                        System.out.println("What question do you want to answer?");
+                        String question = in.next();
+                        String a = question.substring(0, 1).toLowerCase();
+                        int questionScore = Integer.parseInt(question.substring(1));
+
+                        chooseCategory(question);
+
+                        //System.out.println(chooseCategory(input2));
+
+
+                        break;
+                    default:
+                        System.out.println("Ugyldigt input");
+                        break;
+                }
+            }
+                line = in.nextLine();
+                socket.close();
+            } catch(IOException e){
+                e.printStackTrace();
+            }
+        }
+
+
     public static void main(String[] args) throws IOException, ParseException {
-        new Protocol().StartGame();
+        final int port = 6060;
+        final ServerSocket serverSocket = new ServerSocket(port);
+
+        while(true) {
+            Socket socket = serverSocket.accept();
+            System.out.println("[CONNECTED]" + socket.getInetAddress() + " port " + socket.getPort());
+
+            Thread thread = new Thread(new Protocol(socket));
+            thread.start();
+
+        }
     }
 }
