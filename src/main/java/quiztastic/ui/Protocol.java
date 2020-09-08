@@ -79,6 +79,7 @@ public class Protocol implements Runnable {
                 "draw: draw the board\n" +
                 "answer A200: get the question for category A, question for 200 points\n" +
                 "exit: exits the game");
+        out.flush();
     }
 
 
@@ -101,6 +102,7 @@ public class Protocol implements Runnable {
                         break;
                     case "answer":
                         out.println("What question do you want to answer?");
+                        out.flush();
                         String question = in.next();
                         String a = question.substring(0, 1).toLowerCase();
                         int questionScore = Integer.parseInt(question.substring(1));
