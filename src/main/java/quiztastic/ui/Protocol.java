@@ -24,41 +24,6 @@ public class Protocol implements Runnable {
         this.socket = socket;
     }
 
-    public void StartGame() throws IOException, ParseException {
-        Scanner in = new Scanner(System.in);
-
-        System.out.println("Write help for information about the game\n");
-
-        String input = in.next();
-
-        while(!input.equals("exit")) {
-            switch(input) {
-                case "help":
-                    getHelpMsg();
-                    break;
-                case "draw":
-                    displayBoard();
-                    break;
-                case "answer":
-                    System.out.println("What question do you want to answer?");
-                    String question = in.next();
-                    String a = question.substring(0, 1).toLowerCase();
-                    int questionScore = Integer.parseInt(question.substring(1));
-
-                    chooseCategory(question);
-
-                    //System.out.println(chooseCategory(input2));
-
-
-                    break;
-                default:
-                    System.out.println("Ugyldigt input");
-                    break;
-            }
-            input = in.nextLine();
-        }
-    }
-
     private int chooseCategory(String cat){
         Map<String, Integer> options = Map.of("A", 0, "B", 1, "C", 2);
         Integer i = options.get(cat);
@@ -81,33 +46,36 @@ public class Protocol implements Runnable {
         }
     }
 
-    public void displayBoard(){
+    public void displayBoard() throws IOException {
+        PrintWriter out = new PrintWriter(socket.getOutputStream());
         Game game = quiz.getCurrentGame();
         Board board = quiz.getBoard();
         List<Integer> scores = List.of(100,200,300,400,500);
 
         for (Board.Group g : board.getGroups()) {
-            System.out.print(g.getCategory().getName() + " |");
+            out.print(g.getCategory().getName() + " |");
         }
-        System.out.println();
+        out.println();
 
         for(int questionnumber = 0; questionnumber < 5; questionnumber++){
-            System.out.print("|");
+            out.println("|");
             for(int category = 0; category < 5; category++){
-                System.out.print("     ");
+                out.print("     ");
                 if(game.isAnswered(category, questionnumber)){
-                    System.out.print("---");
+                    out.print("---");
                 } else {
-                    System.out.print(scores.get(questionnumber));
+                    out.print(scores.get(questionnumber));
                 }
-                System.out.print("     |");
+                out.print("     |");
             }
-            System.out.println();
+            out.println();
+            out.flush();
         }
     }
 
-    public void getHelpMsg(){
-        System.out.println("******** Jepardy Menu *******\n" +
+    public void getHelpMsg() throws IOException {
+        PrintWriter out = new PrintWriter(socket.getOutputStream());
+        out.println("******** Jepardy Menu *******\n" +
                 "draw: draw the board\n" +
                 "answer A200: get the question for category A, question for 200 points\n" +
                 "exit: exits the game");
@@ -120,7 +88,7 @@ public class Protocol implements Runnable {
             Scanner in = new Scanner(socket.getInputStream());
             PrintWriter out = new PrintWriter(socket.getOutputStream());
 
-            System.out.println("Velkommen til Quiztasic, du kan skrive help for hjælp");
+            out.println("Velkommen til Quiztasic, du kan skrive help for hjælp");
 
             String line = null;
             while (!(line = in.nextLine()).equals("exit")) {
@@ -132,7 +100,7 @@ public class Protocol implements Runnable {
                         displayBoard();
                         break;
                     case "answer":
-                        System.out.println("What question do you want to answer?");
+                        out.println("What question do you want to answer?");
                         String question = in.next();
                         String a = question.substring(0, 1).toLowerCase();
                         int questionScore = Integer.parseInt(question.substring(1));
