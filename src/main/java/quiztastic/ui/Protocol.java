@@ -75,10 +75,10 @@ public class Protocol implements Runnable {
 
     public void getHelpMsg() throws IOException {
         PrintWriter out = new PrintWriter(socket.getOutputStream());
-        out.println("******** Jepardy Menu *******\n" +
-                "draw: draw the board\n" +
-                "answer A200: get the question for category A, question for 200 points\n" +
-                "exit: exits the game");
+        out.println("******** Jepardy Menu *******");
+        out.println("draw: draw the board");
+        out.println("answer A200: get the question for category A, question for 200 points");
+        out.println("exit: exits the game");
         out.flush();
     }
 
@@ -90,7 +90,7 @@ public class Protocol implements Runnable {
             PrintWriter out = new PrintWriter(socket.getOutputStream());
 
             out.println("Velkommen til Quiztasic, du kan skrive help for hjælp");
-
+            out.flush();
             String line = null;
             while (!(line = in.nextLine()).equals("exit")) {
                 switch (line) {
