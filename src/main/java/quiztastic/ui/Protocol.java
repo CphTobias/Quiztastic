@@ -15,13 +15,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class Protocol implements Runnable {
+public class Protocol{
 
     Quiztastic quiz = Quiztastic.getInstance();
-    private final Socket socket;
 
-    public Protocol(Socket socket) {
-        this.socket = socket;
+    private final Scanner in;
+    private final PrintWriter out;
+
+    public Protocol(Scanner in, PrintWriter out) throws IOException {
+        this.in = in;
+        this.out = out;
     }
 
     private int chooseCategory(String cat){
@@ -46,8 +49,7 @@ public class Protocol implements Runnable {
         }
     }
 
-    public void displayBoard() throws IOException {
-        PrintWriter out = new PrintWriter(socket.getOutputStream());
+    public void displayBoard() {
         Game game = quiz.getCurrentGame();
         Board board = quiz.getBoard();
         List<Integer> scores = List.of(100,200,300,400,500);
@@ -73,8 +75,7 @@ public class Protocol implements Runnable {
         }
     }
 
-    public void getHelpMsg() throws IOException {
-        PrintWriter out = new PrintWriter(socket.getOutputStream());
+    public void getHelpMsg() {
         out.println("******** Jepardy Menu *******");
         out.println("draw: draw the board");
         out.println("answer A200: get the question for category A, question for 200 points");
@@ -83,11 +84,8 @@ public class Protocol implements Runnable {
     }
 
 
-    @Override
+
     public void run() {
-        try {
-            Scanner in = new Scanner(socket.getInputStream());
-            PrintWriter out = new PrintWriter(socket.getOutputStream());
 
             out.println("Velkommen til Quiztasic, du kan skrive help for hjælp");
             out.flush();
@@ -114,15 +112,12 @@ public class Protocol implements Runnable {
 
                         break;
                     default:
-                        System.out.println("Ugyldigt input");
+                        out.println("Ugyldigt input");
+                        out.flush();
                         break;
                 }
             }
                 line = in.nextLine();
-                socket.close();
-            } catch(IOException e){
-                e.printStackTrace();
-            }
         }
 
 
@@ -134,7 +129,23 @@ public class Protocol implements Runnable {
             Socket socket = serverSocket.accept();
             System.out.println("[CONNECTED]" + socket.getInetAddress() + " port " + socket.getPort());
 
-            Thread thread = new Thread(new Protocol(socket));
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Protocol p = new Protocol(
+                                new Scanner(socket.getInputStream()), new PrintWriter(socket.getOutputStream()));
+                        p.run();
+                        socket.close();
+                    } catch (IOException e){
+                        try {
+                            socket.close();
+                        } catch (IOException e2) {
+                            e2.printStackTrace();
+                        }
+                    }
+                }
+            });
             thread.start();
 
         }
