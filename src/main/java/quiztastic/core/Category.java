@@ -28,6 +28,10 @@ public class Category {
         return name.equals(category.name);
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(name);
@@ -37,4 +41,5 @@ public class Category {
     public String toString() {
         return name;
     }
+
 }
