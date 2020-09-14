@@ -66,7 +66,7 @@ class QuestionReaderTest {
         ParseException e = assertThrows(ParseException.class, () -> {
             reader.readQuestion();
         });
-        assertEquals("Expected an integer in field 1, but got \"xxx\"", e.getMessage());
+        assertEquals("Expected an integer in field 1, but got \"LAKES & RIVERS\"", e.getMessage());
 
     }
 
