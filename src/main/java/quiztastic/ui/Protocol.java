@@ -104,8 +104,9 @@ public class Protocol{
                         String question = in.next();
                         String a = question.substring(0, 1).toLowerCase();
                         int questionScore = Integer.parseInt(question.substring(1));
+                        int questionToInt = chooseCategory(question);
 
-                        chooseCategory(question);
+                        Game.Answer answer = new Game.Answer();
 
                         //System.out.println(chooseCategory(input2));
 
