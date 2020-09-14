@@ -90,7 +90,7 @@ public class Protocol{
             out.println("Velkommen til Quiztasic, du kan skrive help for hjælp");
             out.flush();
             String line = null;
-            while (!(line = in.nextLine()).equals("exit")) {
+            while (!(line = in.next()).equals("exit")) {
                 switch (line) {
                     case "help":
                         getHelpMsg();
@@ -99,14 +99,17 @@ public class Protocol{
                         displayBoard();
                         break;
                     case "answer":
-                        out.println("What question do you want to answer?");
-                        out.flush();
                         String question = in.next();
-                        String a = question.substring(0, 1).toLowerCase();
+                        String a = question.substring(0, 1).toUpperCase();
                         int questionScore = Integer.parseInt(question.substring(1));
-                        int questionToInt = chooseCategory(question);
+                        int categoryNumber = chooseCategory2(a);
+                        int questionNumber = questionScore/100-1;
+                        Game game = quiz.getCurrentGame();
+                        String questionText = game.getQuestionText(categoryNumber, questionNumber);
+                        out.println(questionText);
+                        out.flush();
+                        //game.answerQuestion(categoryNumber,questionNumber, )
 
-                        //Game.Answer answer = new Game.Answer();
 
                         //System.out.println(chooseCategory(input2));
 
