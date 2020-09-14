@@ -106,7 +106,7 @@ public class Protocol{
                         int questionScore = Integer.parseInt(question.substring(1));
                         int questionToInt = chooseCategory(question);
 
-                        Game.Answer answer = new Game.Answer();
+                        //Game.Answer answer = new Game.Answer();
 
                         //System.out.println(chooseCategory(input2));
 
@@ -120,35 +120,4 @@ public class Protocol{
             }
                 line = in.nextLine();
         }
-
-
-    public static void main(String[] args) throws IOException, ParseException {
-        final int port = 6060;
-        final ServerSocket serverSocket = new ServerSocket(port);
-
-        while(true) {
-            Socket socket = serverSocket.accept();
-            System.out.println("[CONNECTED]" + socket.getInetAddress() + " port " + socket.getPort());
-
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Protocol p = new Protocol(
-                                new Scanner(socket.getInputStream()), new PrintWriter(socket.getOutputStream()));
-                        p.run();
-                        socket.close();
-                    } catch (IOException e){
-                        try {
-                            socket.close();
-                        } catch (IOException e2) {
-                            e2.printStackTrace();
-                        }
-                    }
-                }
-            });
-            thread.start();
-
-        }
-    }
 }

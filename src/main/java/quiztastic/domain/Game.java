@@ -26,10 +26,6 @@ public class Game {
         return list;
     }
 
-    public String answerQuestion(int categoryNumber, int questionNumber, String answer) {
-        Question q = getQuestion(categoryNumber, questionNumber);
-        answerList.add(new Answer(categoryNumber, questionNumber, answer));
-        if (q.getAnswer().equals(answer)) {
     public List<Category> getCategory(){
         return null;
     }
@@ -51,32 +47,28 @@ public class Game {
         return this.board.getGroups().get(categoryNumber).getQuestions().get(questionNumber);
     }
 
-    public boolean isAnswered(int categoryNumber, int questionNumber) {
-        for (Answer a : answerList) {
-            if (a.hasIndex(categoryNumber, questionNumber)) {
-    public boolean isAnswered(int categoryNumber, int questionNumber){
-        for (Answer a : answerList) {
-            if(a.categoryNumber == categoryNumber && a.questionNumber == questionNumber){
-                return true;
+    public boolean isAnswered ( int categoryNumber, int questionNumber){
+         for (Answer a : answerList) {
+              if (a.categoryNumber == categoryNumber && a.questionNumber == questionNumber) {
+                   return true;
+              }
+         }
+         return false;
+    }
+
+            private class Answer {
+                    private final int categoryNumber;
+                    private final int questionNumber;
+                    private final String answer;
+
+                    private Answer(int categoryNumber, int questionNumber, String answer) {
+                        this.categoryNumber = categoryNumber;
+                        this.questionNumber = questionNumber;
+                        this.answer = answer;
+                    }
+
+                    public boolean hasIndex(int categoryNumber, int questionNumber) {
+                        return this.categoryNumber == categoryNumber && this.questionNumber == questionNumber;
+                    }
+                }
             }
-        }
-        return false;
-    }
-
-
-    private class Answer {
-        private final int categoryNumber;
-        private final int questionNumber;
-        private final String answer;
-
-        private Answer(int categoryNumber, int questionNumber, String answer) {
-            this.categoryNumber = categoryNumber;
-            this.questionNumber = questionNumber;
-            this.answer = answer;
-        }
-
-        public boolean hasIndex(int categoryNumber, int questionNumber)  {
-            return this.categoryNumber == categoryNumber && this.questionNumber == questionNumber;
-        }
-    }
-}

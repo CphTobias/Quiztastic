@@ -16,10 +16,6 @@ public class Category {
         this.name = name.toUpperCase();
     }
 
-    public String getName() {
-        return name;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
