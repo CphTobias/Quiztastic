@@ -33,9 +33,12 @@ public class Game {
     public String answerQuestion(int categoryNumber, int questionNumber, String answer){
         Question q = this.board.getGroups().get(categoryNumber).getQuestions().get(questionNumber);
         if(q.getAnswer().equals(answer)){
-            return null;
+            return answer + "was correct!";
+            //return null;
         } else {
-            return q.getAnswer();
+            String incorrect = "The answer was incorrect";
+            //return incorrect;
+            return answer + " was incorrect! The answer was: " + q.getAnswer();
         }
     }
 

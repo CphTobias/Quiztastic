@@ -112,7 +112,10 @@ public class Protocol{
 
                         String questionAnswer = answerQuestion();
 
-                        game.answerQuestion(categoryNumber,questionNumber, questionAnswer);
+                        String result = game.answerQuestion(categoryNumber,questionNumber, questionAnswer);
+                        out.println(result);
+                        out.flush();
+
                         game.isAnswered(categoryNumber, questionNumber);
 
                         break;
