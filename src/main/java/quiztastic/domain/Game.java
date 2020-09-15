@@ -6,7 +6,6 @@ import quiztastic.core.Question;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Game {
     private final Board board;
@@ -32,13 +31,11 @@ public class Game {
 
     public String answerQuestion(int categoryNumber, int questionNumber, String answer){
         Question q = this.board.getGroups().get(categoryNumber).getQuestions().get(questionNumber);
+        answerList.add(new Answer(categoryNumber, questionNumber, answer));
         if(q.getAnswer().equals(answer)){
-            return answer + "was correct!";
-            //return null;
+            return null;
         } else {
-            String incorrect = "The answer was incorrect";
-            //return incorrect;
-            return answer + " was incorrect! The answer was: " + q.getAnswer();
+            return q.getAnswer();
         }
     }
 
@@ -50,9 +47,10 @@ public class Game {
         return this.board.getGroups().get(categoryNumber).getQuestions().get(questionNumber);
     }
 
-    public boolean isAnswered ( int categoryNumber, int questionNumber){
+    public boolean isAnswered (int categoryNumber, int questionNumber){
          for (Answer a : answerList) {
               if (a.categoryNumber == categoryNumber && a.questionNumber == questionNumber) {
+              //if (a.hasIndex(categoryNumber,questionNumber)){
                    return true;
               }
          }
@@ -64,13 +62,14 @@ public class Game {
                     private final int questionNumber;
                     private final String answer;
 
-                    private Answer(int categoryNumber, int questionNumber, String answer) {
-                        this.categoryNumber = categoryNumber;
-                        this.questionNumber = questionNumber;
-                        this.answer = answer;
-                    }
+                private Answer(int categoryNumber, int questionNumber, String answer) {
+                    this.categoryNumber = categoryNumber;
+                    this.questionNumber = questionNumber;
+                    this.answer = answer;
+                }
 
-                    public boolean hasIndex(int categoryNumber, int questionNumber) {
+
+                public boolean hasIndex(int categoryNumber, int questionNumber) {
                         return this.categoryNumber == categoryNumber && this.questionNumber == questionNumber;
                     }
                 }

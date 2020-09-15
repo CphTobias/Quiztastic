@@ -61,7 +61,7 @@ public class Protocol{
         out.println();
 
         for(int questionnumber = 0; questionnumber < 5; questionnumber++){
-            out.println("|");
+            out.print("|");
             for(int category = 0; category < 5; category++){
                 out.print("     ");
                 if(game.isAnswered(category, questionnumber)){
@@ -105,18 +105,8 @@ public class Protocol{
                         int questionScore = Integer.parseInt(question.substring(1));
                         int categoryNumber = chooseCategory2(a);
                         int questionNumber = questionScore/100-1;
-                        Game game = quiz.getCurrentGame();
-                        String questionText = game.getQuestionText(categoryNumber, questionNumber);
-                        out.println(questionText);
-                        out.flush();
-
-                        String questionAnswer = answerQuestion();
-
-                        String result = game.answerQuestion(categoryNumber,questionNumber, questionAnswer);
-                        out.println(result);
-                        out.flush();
-
-                        game.isAnswered(categoryNumber, questionNumber);
+                        in.nextLine();
+                        answeredQuestion(categoryNumber, questionNumber);
 
                         break;
                     default:
@@ -132,6 +122,24 @@ public class Protocol{
         Scanner scanner = new Scanner(System.in);
         String answer = scanner.nextLine();
         return answer;
+    }
+
+    private void answeredQuestion(int categoryNumber, int questionNumber){
+        Game game = quiz.getCurrentGame();
+        String questionText = game.getQuestionText(categoryNumber, questionNumber);
+        out.println(questionText);
+        out.print("? ");
+        out.flush();
+
+        String answer = in.nextLine();
+        String result = game.answerQuestion(categoryNumber,questionNumber, answer);
+        if (result == null) {
+            out.println(answer + " Was correct!");
+        } else {
+            out.println(answer + " Was incorrect, the correct answer was: " + result);
+        }
+        out.flush();
+
     }
 
     public static void main(String[] args) throws IOException {
