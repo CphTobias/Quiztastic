@@ -11,9 +11,9 @@ public class Board {
 
     public Board(List<Group> groups) {
         this.groups = List.copyOf(groups);
-        if (this.groups.size() != 6) {
+        if (this.groups.size() != 5) {
             throw new IllegalArgumentException(
-                    "Should be 6 groups, there were " + groups.size());
+                    "Should be 5 groups, there were " + groups.size());
         }
     }
 
@@ -61,7 +61,10 @@ public class Board {
 
         @Override
         public String toString() {
-            return "" + questions.get(200);
+            return "Group{" +
+                    "category=" + category +
+                    ", questions=" + questions +
+                    '}';
         }
     }
 }

@@ -50,12 +50,13 @@ public class Protocol{
     }
 
     public void displayBoard() {
+        char categoryLetter = 'A';
         Game game = quiz.getCurrentGame();
         Board board = quiz.getBoard();
         List<Integer> scores = List.of(100,200,300,400,500);
 
         for (Board.Group g : board.getGroups()) {
-            out.print(g.getCategory().getName() + " |");
+            out.print("[" + categoryLetter++ + "]" + " " + g.getCategory().getName() + " |");
         }
         out.println();
 
@@ -108,11 +109,11 @@ public class Protocol{
                         String questionText = game.getQuestionText(categoryNumber, questionNumber);
                         out.println(questionText);
                         out.flush();
-                        //game.answerQuestion(categoryNumber,questionNumber, )
 
+                        String questionAnswer = answerQuestion();
 
-                        //System.out.println(chooseCategory(input2));
-
+                        game.answerQuestion(categoryNumber,questionNumber, questionAnswer);
+                        game.isAnswered(categoryNumber, questionNumber);
 
                         break;
                     default:
@@ -123,4 +124,15 @@ public class Protocol{
             }
                 line = in.nextLine();
         }
+
+    private String answerQuestion() {
+        Scanner scanner = new Scanner(System.in);
+        String answer = scanner.nextLine();
+        return answer;
+    }
+
+    public static void main(String[] args) throws IOException {
+        Protocol protocol = new Protocol(new Scanner(System.in), new PrintWriter(System.out));
+        protocol.run();
+    }
 }
