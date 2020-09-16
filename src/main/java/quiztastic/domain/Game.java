@@ -2,6 +2,7 @@ package quiztastic.domain;
 
 import quiztastic.core.Board;
 import quiztastic.core.Category;
+import quiztastic.core.Player;
 import quiztastic.core.Question;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
 public class Game {
     private final Board board;
     private final List<Answer> answerList;
+    private ArrayList<Player> players = new ArrayList<Player>();
 
     public Game(Board board, List<Answer> answerList) {
         this.board = board;
@@ -36,6 +38,16 @@ public class Game {
             return null;
         } else {
             return q.getAnswer();
+        }
+    }
+
+    public void addPlayer(Player p){
+        players.add(p);
+    }
+
+    public void showScoreBoard() {
+        for (Player p: players) {
+            System.out.println(p);
         }
     }
 

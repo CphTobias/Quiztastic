@@ -2,15 +2,12 @@ package quiztastic.ui;
 
 import quiztastic.app.Quiztastic;
 import quiztastic.core.Board;
-import quiztastic.core.Question;
+import quiztastic.core.Player;
 import quiztastic.domain.Game;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringBufferInputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -21,11 +18,13 @@ public class Protocol{
 
     private final Scanner in;
     private final PrintWriter out;
+    //private ArrayList<Player> players = new ArrayList<Player>();
 
     public Protocol(Scanner in, PrintWriter out) throws IOException {
         this.in = in;
         this.out = out;
     }
+
 
     private int chooseCategory(String cat){
         Map<String, Integer> options = Map.of("A", 0, "B", 1, "C", 2);
@@ -86,13 +85,20 @@ public class Protocol{
 
 
 
-    public void run() {
-
-            out.println("Velkommen til Quiztasic, du kan skrive help for hjælp");
+    public void run(Player player) {
+            Game game = quiz.getCurrentGame();
+            String playerNavn = player.getPlayerName();
+            out.println("Velkommen til Quiztasic " + playerNavn + ", du kan skrive help for hjælp");
             out.flush();
             String line = null;
             while (!(line = in.next()).equals("exit")) {
                 switch (line) {
+                    case "makeplayer":
+                        makePlayerAndRun();
+                        break;
+                    case "scoreboard":
+                        game.showScoreBoard();
+                        break;
                     case "help":
                         getHelpMsg();
                         break;
@@ -106,7 +112,7 @@ public class Protocol{
                         int categoryNumber = chooseCategory2(a);
                         int questionNumber = questionScore/100-1;
                         in.nextLine();
-                        answeredQuestion(categoryNumber, questionNumber);
+                        answeredQuestion(categoryNumber, questionNumber, player);
 
                         break;
                     default:
@@ -118,15 +124,28 @@ public class Protocol{
                 line = in.nextLine();
         }
 
-    private String answerQuestion() {
+
+    public void makePlayerAndRun(){
+        Game game = quiz.getCurrentGame();
         Scanner scanner = new Scanner(System.in);
-        String answer = scanner.nextLine();
-        return answer;
+        out.println("Velkommen til Quiztasic, her kan du vælge dit flotte navn :)");
+        out.println("Indtast dit fornavn her: ");
+        out.flush();
+        String playerNavn = scanner.next();
+        int playerScore = 0;
+        Player player = new Player(playerNavn, playerScore);
+        game.addPlayer(player);
+        run(player);
     }
 
-    private void answeredQuestion(int categoryNumber, int questionNumber){
+    /*private void addPlayer(Player p){
+        players.add(p);
+    }*/
+
+    private void answeredQuestion(int categoryNumber, int questionNumber, Player player){
         Game game = quiz.getCurrentGame();
         String questionText = game.getQuestionText(categoryNumber, questionNumber);
+        int score = (questionNumber+1)*100;
         out.println(questionText);
         out.print("? ");
         out.flush();
@@ -135,7 +154,9 @@ public class Protocol{
         String result = game.answerQuestion(categoryNumber,questionNumber, answer);
         if (result == null) {
             out.println(answer + " Was correct!");
+            player.setPlayerScore(player.getPlayerScore() + score);
         } else {
+            //Eventuelt fjern senere hvis flere spillere
             out.println(answer + " Was incorrect, the correct answer was: " + result);
         }
         out.flush();
@@ -144,6 +165,7 @@ public class Protocol{
 
     public static void main(String[] args) throws IOException {
         Protocol protocol = new Protocol(new Scanner(System.in), new PrintWriter(System.out));
-        protocol.run();
+        protocol.makePlayerAndRun();
+        //protocol.run();
     }
 }
