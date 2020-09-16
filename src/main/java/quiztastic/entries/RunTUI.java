@@ -16,13 +16,13 @@ public class RunTUI {
         while(true) {
             Socket socket = serverSocket.accept();
             System.out.println("[CONNECTED]" + socket.getInetAddress() + " port " + socket.getPort());
-
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         Protocol p = new Protocol(
                                 new Scanner(socket.getInputStream()), new PrintWriter(socket.getOutputStream()));
+                        p.makeCounter();
                         p.makePlayerAndRun();
                         socket.close();
                     } catch (IOException e){

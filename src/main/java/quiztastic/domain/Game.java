@@ -5,8 +5,10 @@ import quiztastic.core.Category;
 import quiztastic.core.Player;
 import quiztastic.core.Question;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Game {
     private final Board board;

@@ -18,6 +18,7 @@ public class Protocol{
 
     private final Scanner in;
     private final PrintWriter out;
+    private int counter = 1;
     //private ArrayList<Player> players = new ArrayList<Player>();
 
     public Protocol(Scanner in, PrintWriter out) throws IOException {
@@ -77,6 +78,8 @@ public class Protocol{
 
     public void getHelpMsg() {
         out.println("******** Jepardy Menu *******");
+        out.println("makeplayer: to make a new player");
+        out.println("scoreboard: to show the current scoreboard");
         out.println("draw: draw the board");
         out.println("answer A200: get the question for category A, question for 200 points");
         out.println("exit: exits the game");
@@ -93,7 +96,7 @@ public class Protocol{
             String line = null;
             while (!(line = in.next()).equals("exit")) {
                 switch (line) {
-                    case "makeplayer":
+                    case "createplayer":
                         makePlayerAndRun();
                         break;
                     case "scoreboard":
@@ -127,19 +130,33 @@ public class Protocol{
 
     public void makePlayerAndRun(){
         Game game = quiz.getCurrentGame();
-        Scanner scanner = new Scanner(System.in);
         out.println("Velkommen til Quiztasic, her kan du vælge dit flotte navn :)");
+        out.flush();
+        out.println("VIS DU ER HER!");
+        out.flush();
+        in.nextLine();
         out.println("Indtast dit fornavn her: ");
         out.flush();
-        String playerNavn = scanner.next();
+        String playerNavn = in.next();
         int playerScore = 0;
-        Player player = new Player(playerNavn, playerScore);
+        Player player = new Player(counter, playerNavn, playerScore);
         game.addPlayer(player);
         run(player);
     }
 
+    public synchronized int makeCounter(){
+        counter++;
+        return counter;
+    }
+
     /*private void addPlayer(Player p){
         players.add(p);
+    }
+    public void showScoreBoard() {
+        for (Player p: players) {
+            out.println(p);
+            out.flush();
+        }
     }*/
 
     private void answeredQuestion(int categoryNumber, int questionNumber, Player player){
