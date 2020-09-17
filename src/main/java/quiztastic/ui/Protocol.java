@@ -139,6 +139,7 @@ public class Protocol{
         out.flush();
         String playerNavn = in.next();
         int playerScore = 0;
+        int counter2 = counter++;
         Player player = new Player(counter, playerNavn, playerScore);
         game.addPlayer(player);
         run(player);
