@@ -100,7 +100,7 @@ public class Protocol{
                         makePlayerAndRun();
                         break;
                     case "scoreboard":
-                        game.showScoreBoard();
+                        showScoreBoard();
                         break;
                     case "help":
                         getHelpMsg();
@@ -149,15 +149,13 @@ public class Protocol{
         return counter;
     }
 
-    /*private void addPlayer(Player p){
-        players.add(p);
-    }
     public void showScoreBoard() {
-        for (Player p: players) {
+        Game game = quiz.getCurrentGame();
+        for (Player p: game.players) {
             out.println(p);
             out.flush();
         }
-    }*/
+    }
 
     private void answeredQuestion(int categoryNumber, int questionNumber, Player player){
         Game game = quiz.getCurrentGame();

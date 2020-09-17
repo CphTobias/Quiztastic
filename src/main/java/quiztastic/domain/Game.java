@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class Game {
     private final Board board;
     private final List<Answer> answerList;
-    private ArrayList<Player> players = new ArrayList<Player>();
+    public ArrayList<Player> players = new ArrayList<Player>();
 
     public Game(Board board, List<Answer> answerList) {
         this.board = board;
@@ -45,12 +45,6 @@ public class Game {
 
     public void addPlayer(Player p){
         players.add(p);
-    }
-
-    public void showScoreBoard() {
-        for (Player p: players) {
-            System.out.println(p);
-        }
     }
 
     public String getQuestionText(int categoryNumber, int questionNumber) {
