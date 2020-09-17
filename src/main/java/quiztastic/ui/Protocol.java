@@ -78,7 +78,7 @@ public class Protocol{
 
     public void getHelpMsg() {
         out.println("******** Jepardy Menu *******");
-        out.println("makeplayer: to make a new player");
+        out.println("createplayer: to make a new player");
         out.println("scoreboard: to show the current scoreboard");
         out.println("draw: draw the board");
         out.println("answer A200: get the question for category A, question for 200 points");
