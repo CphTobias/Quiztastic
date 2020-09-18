@@ -7,10 +7,7 @@ import quiztastic.domain.Game;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Protocol{
 
@@ -18,7 +15,9 @@ public class Protocol{
 
     private final Scanner in;
     private final PrintWriter out;
-    private int counter = 1;
+    //private int counter = 1;
+    private volatile int waiting;
+
     //private ArrayList<Player> players = new ArrayList<Player>();
 
     public Protocol(Scanner in, PrintWriter out) throws IOException {
@@ -96,8 +95,46 @@ public class Protocol{
             String line = null;
             while (!(line = in.next()).equals("exit")) {
                 switch (line) {
+                    case "print":
+                        out.println("playersize :)" + game.players.size());
+                        out.flush();
+                        break;
                     case "createplayer":
                         makePlayerAndRun();
+                        break;
+                    case "play":
+                        Player player1 = game.startGame();
+                        if(player.equals(player1)){
+                            displayBoard();
+                            out.println("DU skal spille");
+                            out.flush();
+                            String question = in.next();
+                            while(question.length() != 4){
+                                out.print(question + ": Er ikke gyldig format, prøv igen");
+                                out.print("\nEks: \"A400\"");
+                                out.flush();
+                                question = in.next();
+                            }
+                            String a = question.substring(0, 1).toUpperCase();
+                            int questionScore = Integer.parseInt(question.substring(1));
+                            int categoryNumber = chooseCategory2(a);
+                            int questionNumber = questionScore/100-1;
+                            in.nextLine();
+                            answeredQuestion(categoryNumber, questionNumber, player);
+
+                        } else {
+                            try {
+                                out.println(player1 + "har vundet, venter på hans svar.");
+                                out.flush();
+                                Game.Answer player1Answer = game.waitForAnswer();
+                                out.println(player1Answer + " ");
+                                out.flush();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        out.flush();
                         break;
                     case "scoreboard":
                         showScoreBoard();
@@ -139,16 +176,12 @@ public class Protocol{
         out.flush();
         String playerNavn = in.next();
         int playerScore = 0;
-        int counter2 = counter++;
-        Player player = new Player(counter, playerNavn, playerScore);
+        int counter2 = game.makeCounter();
+        Player player = new Player(counter2, playerNavn, playerScore);
         game.addPlayer(player);
         run(player);
     }
 
-    public synchronized int makeCounter(){
-        counter++;
-        return counter;
-    }
 
     public void showScoreBoard() {
         Game game = quiz.getCurrentGame();
@@ -157,6 +190,8 @@ public class Protocol{
             out.flush();
         }
     }
+
+
 
     private void answeredQuestion(int categoryNumber, int questionNumber, Player player){
         Game game = quiz.getCurrentGame();

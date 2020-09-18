@@ -22,7 +22,7 @@ public class RunTUI {
                     try {
                         Protocol p = new Protocol(
                                 new Scanner(socket.getInputStream()), new PrintWriter(socket.getOutputStream()));
-                        p.makeCounter();
+                        //p.makeCounter();
                         p.makePlayerAndRun();
                         socket.close();
                     } catch (IOException e){
