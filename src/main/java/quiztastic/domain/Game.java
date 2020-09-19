@@ -78,7 +78,7 @@ public class Game {
         return roundPlayer;
     }
 
-    private Player getRandomPlayer() {
+    public Player getRandomPlayer() {
         Random random = new Random();
         int randomPlayer = random.nextInt(players.size());
         return players.get(randomPlayer);
@@ -129,8 +129,19 @@ public class Game {
                     this.answer = answer;
                 }
 
+        public int getCategoryNumber() {
+            return categoryNumber;
+        }
 
-                public boolean hasIndex(int categoryNumber, int questionNumber) {
+        public int getQuestionNumber() {
+            return questionNumber;
+        }
+
+        public String getAnswer() {
+            return answer;
+        }
+
+        public boolean hasIndex(int categoryNumber, int questionNumber) {
                         return this.categoryNumber == categoryNumber && this.questionNumber == questionNumber;
                     }
 

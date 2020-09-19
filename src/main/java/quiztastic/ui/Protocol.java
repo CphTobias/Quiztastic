@@ -88,6 +88,9 @@ public class Protocol{
 
 
     public void run(Player player) {
+            int questionScore;
+            int categoryNumber;
+            int questionNumber;
             Game game = quiz.getCurrentGame();
             String playerNavn = player.getPlayerName();
             out.println("Velkommen til Quiztasic " + playerNavn + ", du kan skrive help for hjælp");
@@ -112,19 +115,22 @@ public class Protocol{
                                 question = in.next();
                             }
                             String a = question.substring(0, 1).toUpperCase();
-                            int questionScore = Integer.parseInt(question.substring(1));
-                            int categoryNumber = chooseCategory2(a);
-                            int questionNumber = questionScore/100-1;
+                            questionScore = Integer.parseInt(question.substring(1));
+                            categoryNumber = chooseCategory2(a);
+                            questionNumber = questionScore/100-1;
                             in.nextLine();
                             answeredQuestion(categoryNumber, questionNumber, player);
-
-                        } else {
+                            } else {
                             try {
                                 out.println(player1 + " skal svare, venter på hans svar");
                                 out.flush();
                                 Game.Answer player1Answer = game.waitForAnswer();
                                 out.println(player1Answer + " ");
                                 out.flush();
+                                while(answeredQuestion(player1Answer.getCategoryNumber(),player1Answer.getQuestionNumber(),player) == false){
+                                    out.println("Og det var forkert");
+                                    out.flush();
+                                }
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -184,9 +190,10 @@ public class Protocol{
 
 
 
-    private void answeredQuestion(int categoryNumber, int questionNumber, Player player){
+    private boolean answeredQuestion(int categoryNumber, int questionNumber, Player player){
         Game game = quiz.getCurrentGame();
         String questionText = game.getQuestionText(categoryNumber, questionNumber);
+        boolean rigtigt;
         int score = (questionNumber+1)*100;
         out.println(questionText);
         out.print("? ");
@@ -197,11 +204,15 @@ public class Protocol{
         if (result == null) {
             out.println(answer + " Was correct!");
             player.setPlayerScore(player.getPlayerScore() + score);
+            rigtigt = true;
         } else {
             //Eventuelt fjern senere hvis flere spillere
             out.println(answer + " Was incorrect, the correct answer was: " + result);
+            game.getRandomPlayer();
+            rigtigt = false;
         }
         out.flush();
+        return rigtigt;
     }
 
     public static void main(String[] args) throws IOException {
