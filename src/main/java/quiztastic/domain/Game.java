@@ -54,6 +54,7 @@ public class Game {
         }
     }
 
+
     public synchronized Player startGame() {
         if(currentanswer != null){
             activePlayers = 0;
@@ -141,4 +142,4 @@ public class Game {
                     " er: " + answer;
         }
     }
-            }
+}

@@ -1,5 +1,9 @@
 package quiztastic.core;
 
+import quiztastic.ui.Protocol;
+
+import java.io.IOException;
+
 public class Player {
 
     private final String playerName;
@@ -35,6 +39,6 @@ public class Player {
     @Override
     public String toString() {
         return  "Player " + counter + ": " + playerName +
-                "\nScore:" + playerScore + "\n-------------------------------";
+                " | Score: " + playerScore;
     }
 }

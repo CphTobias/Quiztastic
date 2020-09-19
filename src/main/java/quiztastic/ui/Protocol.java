@@ -13,8 +13,8 @@ public class Protocol{
 
     Quiztastic quiz = Quiztastic.getInstance();
 
-    private final Scanner in;
-    private final PrintWriter out;
+    private Scanner in;
+    private PrintWriter out;
     //private int counter = 1;
     private volatile int waiting;
 
@@ -24,7 +24,6 @@ public class Protocol{
         this.in = in;
         this.out = out;
     }
-
 
     private int chooseCategory(String cat){
         Map<String, Integer> options = Map.of("A", 0, "B", 1, "C", 2);
@@ -77,10 +76,11 @@ public class Protocol{
 
     public void getHelpMsg() {
         out.println("******** Jepardy Menu *******");
-        out.println("createplayer: to make a new player");
+        out.println("play: Asks everyone on the server to play the game with you");
+        //out.println("createplayer: to make a new player");
         out.println("scoreboard: to show the current scoreboard");
         out.println("draw: draw the board");
-        out.println("answer A200: get the question for category A, question for 200 points");
+        //out.println("answer A200: get the question for category A, question for 200 points");
         out.println("exit: exits the game");
         out.flush();
     }
@@ -92,21 +92,17 @@ public class Protocol{
             String playerNavn = player.getPlayerName();
             out.println("Velkommen til Quiztasic " + playerNavn + ", du kan skrive help for hjælp");
             out.flush();
-            String line = null;
+            String line;
             while (!(line = in.next()).equals("exit")) {
                 switch (line) {
-                    case "print":
-                        out.println("playersize :)" + game.players.size());
-                        out.flush();
-                        break;
-                    case "createplayer":
+                    /*case "createplayer":
                         makePlayerAndRun();
-                        break;
+                        break;*/
                     case "play":
                         Player player1 = game.startGame();
                         if(player.equals(player1)){
                             displayBoard();
-                            out.println("DU skal spille");
+                            out.println("Du skal vælge et spørgsmål");
                             out.flush();
                             String question = in.next();
                             while(question.length() != 4){
@@ -124,7 +120,7 @@ public class Protocol{
 
                         } else {
                             try {
-                                out.println(player1 + "har vundet, venter på hans svar.");
+                                out.println(player1 + " skal svare, venter på hans svar");
                                 out.flush();
                                 Game.Answer player1Answer = game.waitForAnswer();
                                 out.println(player1Answer + " ");
@@ -145,7 +141,7 @@ public class Protocol{
                     case "draw":
                         displayBoard();
                         break;
-                    case "answer":
+                    /*case "answer":
                         String question = in.next();
                         String a = question.substring(0, 1).toUpperCase();
                         int questionScore = Integer.parseInt(question.substring(1));
@@ -154,7 +150,7 @@ public class Protocol{
                         in.nextLine();
                         answeredQuestion(categoryNumber, questionNumber, player);
 
-                        break;
+                        break;*/
                     default:
                         out.println("Ugyldigt input");
                         out.flush();
@@ -164,14 +160,8 @@ public class Protocol{
                 line = in.nextLine();
         }
 
-
     public void makePlayerAndRun(){
         Game game = quiz.getCurrentGame();
-        out.println("Velkommen til Quiztasic, her kan du vælge dit flotte navn :)");
-        out.flush();
-        out.println("VIS DU ER HER!");
-        out.flush();
-        in.nextLine();
         out.println("Indtast dit fornavn her: ");
         out.flush();
         String playerNavn = in.next();
@@ -187,6 +177,7 @@ public class Protocol{
         Game game = quiz.getCurrentGame();
         for (Player p: game.players) {
             out.println(p);
+            out.println("-----------------------------------------------");
             out.flush();
         }
     }
@@ -211,7 +202,6 @@ public class Protocol{
             out.println(answer + " Was incorrect, the correct answer was: " + result);
         }
         out.flush();
-
     }
 
     public static void main(String[] args) throws IOException {
