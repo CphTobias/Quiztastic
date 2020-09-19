@@ -9,6 +9,7 @@ import java.util.List;
 public class Board {
     private final List<Group> groups;
 
+    //Her checker vi vor mange grupper/kategorier vi har
     public Board(List<Group> groups) {
         this.groups = List.copyOf(groups);
         if (this.groups.size() != 5) {
@@ -38,6 +39,7 @@ public class Board {
             validate();
         }
 
+        //Her vælger vi hvor mange spørgsmål vi vil have til vær kategori.
         private void validate() {
             if (questions.size() != 5) {
                 throw new IllegalArgumentException(

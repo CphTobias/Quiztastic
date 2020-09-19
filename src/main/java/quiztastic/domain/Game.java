@@ -13,12 +13,13 @@ import java.util.Scanner;
 
 public class Game {
     private final Board board;
+    //Der bliver lavet en liste af svar efter en spiller svarer på et spørgsmål.
     private final List<Answer> answerList;
+    //Vi laver et array af de players som kommer ind i vores spil.
     public ArrayList<Player> players = new ArrayList<Player>();
 
     private volatile Player roundPlayer;
     private volatile int activePlayers = 0;
-
     private volatile Answer currentanswer = null;
 
     private int counter = 0;
@@ -28,20 +29,20 @@ public class Game {
         this.answerList = answerList;
     }
 
-    public List<Category> getCategories() {
+    /*public List<Category> getCategories() {
         List<Category> list = new ArrayList<>();
         for (Board.Group group : this.board.getGroups()) {
             Category category = group.getCategory();
             list.add(category);
         }
         return list;
-    }
+    }*/
 
     public List<Category> getCategory(){
         return null;
     }
 
-
+    //Den undersøger om dit svar er = svaret i .tsv filen, og returner null hvis det er rigtigt.
     public synchronized String answerQuestion(int categoryNumber, int questionNumber, String answer){
         Question q = this.board.getGroups().get(categoryNumber).getQuestions().get(questionNumber);
         currentanswer = new Answer(categoryNumber, questionNumber, answer);
@@ -61,8 +62,11 @@ public class Game {
             currentanswer = null;
             roundPlayer = null;
         }
+        //Active players tæller hvor mange som er i spillet
         activePlayers += 1;
         notifyAll();
+
+        //Den vil side og vente på at alle spillerene i spillet har skrevet play
         while (activePlayers != players.size()){
             try {
                 this.wait();
@@ -71,6 +75,7 @@ public class Game {
             }
         }
 
+        //Der bliver fundet en "Vinder" som er den person som bliver returneret og er den person som skal spille.
         if(roundPlayer == null) {
             roundPlayer = getRandomPlayer();
         }
@@ -84,11 +89,13 @@ public class Game {
         return players.get(randomPlayer);
     }
 
+    //Counter på hvor mange ID'er vi har i spillet
     public synchronized int makeCounter(){
         counter++;
         return counter;
     }
 
+    //Kan blive kaldt til at tilføje en spiller til spillet.
     public void addPlayer(Player p){
         players.add(p);
     }
@@ -101,6 +108,7 @@ public class Game {
         return this.board.getGroups().get(categoryNumber).getQuestions().get(questionNumber);
     }
 
+    //Bliver kaldt til at fjerne et spørgsmål fra kategorierne
     public boolean isAnswered (int categoryNumber, int questionNumber){
          for (Answer a : answerList) {
               if (a.categoryNumber == categoryNumber && a.questionNumber == questionNumber) {
@@ -111,6 +119,7 @@ public class Game {
          return false;
     }
 
+    //Venter på at personen som er blevet valgt til at spille får svaret på sit spørgsmål
     public synchronized Answer waitForAnswer() throws InterruptedException {
         while(currentanswer == null){
             wait();
@@ -118,6 +127,7 @@ public class Game {
         return currentanswer;
     }
 
+    //Her tager vi imod alle de svar som kommer ind i spillet.
     public class Answer {
                     private final int categoryNumber;
                     private final int questionNumber;

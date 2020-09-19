@@ -29,6 +29,8 @@ public class QuestionReader {
         if (line == null) {
             return null;
         } else {
+            //Her checker vi får om mængden af spørgsmål er X, og hvis den ikke er, giver vi en exception
+            //Derefter splitter vi vores String, og inddeler den til score, category, question og answer.
             String[] fields = line.split("\t");
             if (fields.length != 4) {
                 throw new ParseException(
@@ -37,6 +39,7 @@ public class QuestionReader {
             }
             int score;
             try {
+                //Dette er en String som vi passer til en Integer.
                 score = Integer.parseInt(fields[0]);
             } catch (NumberFormatException e) {
                 throw new ParseException(

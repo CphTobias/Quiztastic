@@ -1,0 +1,50 @@
+@startuml
+Class entries.RunTUI{
+}
+
+Class domain.BoardFactory{
+}
+
+Class domain.Game{
+}
+
+Interface domain.QuestionRepository{
+}
+
+Class domain.Game.Answers{
+}
+
+Class core.Board{
+}
+
+Class core.Category{
+}
+
+Class core.Player{
+}
+
+Class core.Question{
+}
+
+Class ui.Protocol{
+}
+
+Class app.MapQuestionRepository{
+}
+
+Class app.QuestionReader{
+}
+
+Class app.Quiztastic{
+}
+
+domain.Game<-->core
+domain.Game<-- domain.Game.Answers
+domain.Game<-->ui.Protocol
+domain.Game<-- domain.BoardFactory
+app-->core.Category
+app-->core.Board
+app-->core.Question
+domain.Game<-->core.Player
+
+@enduml

@@ -15,12 +15,14 @@ public class MapQuestionRepository implements QuestionRepository {
         this.questionsByCategory = questionsByCategory;
     }
 
+    /*
+    Hashmap indeholder Category og Question
+     */
+
     public static MapQuestionRepository fromQuestionReader(QuestionReader reader) throws IOException, ParseException {
-        //throw new UnsupportedOperationException("Not implemented yet!");
-        int count = 0;
         HashMap<Category, Set<Question>> questionsByCategory = new HashMap<>();
         Question q;
-
+        //Her putter vi alle questionsne ind i et HashMap
         while ((q = reader.readQuestion()) != null) {
             Set<Question> current = questionsByCategory.get(q.getCategory());
             if (current == null) {
@@ -33,7 +35,6 @@ public class MapQuestionRepository implements QuestionRepository {
     }
     @Override
     public List<Category> getCategories() {
-        //throw new UnsupportedOperationException("Not implemented yet!");
         List<Category> categoryNames = List.copyOf(questionsByCategory.keySet());
 
         return categoryNames;
@@ -41,7 +42,6 @@ public class MapQuestionRepository implements QuestionRepository {
 
     @Override
     public List<Question> getQuestionsWithCategory(Category category) {
-        //throw new UnsupportedOperationException("Not implemented yet!");
         List<Question> questionsWithCategory = List.copyOf(questionsByCategory.get(category));
         return questionsWithCategory;
     }

@@ -8,6 +8,7 @@ import java.util.Objects;
 public class Category {
     private final String name;
 
+    //Hvis kategorien er tom, giver vi en exception.
     public Category(String name) {
         if (name == null)
             throw new NullPointerException();

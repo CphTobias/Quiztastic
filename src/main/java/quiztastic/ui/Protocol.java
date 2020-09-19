@@ -25,16 +25,7 @@ public class Protocol{
         this.out = out;
     }
 
-    private int chooseCategory(String cat){
-        Map<String, Integer> options = Map.of("A", 0, "B", 1, "C", 2);
-        Integer i = options.get(cat);
-        if(i == null){
-            System.out.println("Not a valid category: " + cat);
-            i = -1;
-        }
-        return i;
-    }
-
+    //Her tager vi imod en String som bliver lavet om til en Integer.
     private int chooseCategory2(String cat){
         switch(cat){
             case "A": return 0;
@@ -47,21 +38,25 @@ public class Protocol{
         }
     }
 
+    //Udskriver boardet
     public void displayBoard() {
         char categoryLetter = 'A';
         Game game = quiz.getCurrentGame();
         Board board = quiz.getBoard();
         List<Integer> scores = List.of(100,200,300,400,500);
 
+        //Udskriver Categories med bogstav foran.
         for (Board.Group g : board.getGroups()) {
             out.print("[" + categoryLetter++ + "]" + " " + g.getCategory().getName() + " |");
         }
         out.println();
 
+        //Udskrivning af den enkelte category's, spørgsmål i score
         for(int questionnumber = 0; questionnumber < 5; questionnumber++){
             out.print("|");
             for(int category = 0; category < 5; category++){
                 out.print("     ");
+                //Hvis kategorien er svaret på vil den udskrive --- istedet for scoren/spørgsmålet
                 if(game.isAnswered(category, questionnumber)){
                     out.print("---");
                 } else {
@@ -74,6 +69,7 @@ public class Protocol{
         }
     }
 
+    //Udskrivning af vores menu
     public void getHelpMsg() {
         out.println("******** Jepardy Menu *******");
         out.println("play: Asks everyone on the server to play the game with you");
@@ -86,21 +82,27 @@ public class Protocol{
     }
 
 
-
+    //Tager imod en player fra vores makePlayerAndRun();
     public void run(Player player) {
             int questionScore;
             int categoryNumber;
             int questionNumber;
             Game game = quiz.getCurrentGame();
+
+            //laver String af vores player's navn
             String playerNavn = player.getPlayerName();
             out.println("Velkommen til Quiztasic " + playerNavn + ", du kan skrive help for hjælp");
             out.flush();
             String line;
+
+            //Her starter vores switch case som styrer menu'en. Hvis personen ikke skriver exit vil han/hun aldrig ryge ud.
             while (!(line = in.next()).equals("exit")) {
                 switch (line) {
                     /*case "createplayer":
                         makePlayerAndRun();
                         break;*/
+
+                    //Når du skriver play vil den side og vente på at alle personerne i spillet har skrevet play.
                     case "play":
                         Player player1 = game.startGame();
                         if(player.equals(player1)){

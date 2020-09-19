@@ -17,7 +17,7 @@ public class BoardFactory {
         this.questionRepository = questionRepository;
     }
     public Board.Group makeGroup(Category c) throws IllegalArgumentException {
-
+        //Her sætter vi hvor mange questions vi vil have i vores Category
         List<Question> questions =
                 questionRepository.getQuestionsWithCategory(c);
         if (questions.size() >= 5) {
@@ -30,6 +30,7 @@ public class BoardFactory {
 
     public Board makeBoard() {
         List<Board.Group> groups = new ArrayList<>();
+        //Her vælger vi hvor mange Categories vi vil have.
         for (Category c : questionRepository.getCategories()) {
             if (groups.size() == 5) break;
             try {

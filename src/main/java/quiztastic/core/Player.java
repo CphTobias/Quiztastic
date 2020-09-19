@@ -10,6 +10,7 @@ public class Player {
     private int playerScore;
     private int counter;
 
+    //Her har vi vores player element, som vil blive tilføget når en person kommer ind på serveren og skriver deres navn.
     public Player(int counter, String playerName, int playerScore) {
         this.counter = counter;
         this.playerName = playerName;

@@ -11,6 +11,7 @@ public class Question {
     private final String question;
     private final String answer;
 
+    //Question, bliver tilføget af QuestionReaderen, efter opsplitning af .tsv fil fra Quiztastic.
     public Question(int score, Category category, String question, String answer) {
         this.score = score;
         this.category = category;
